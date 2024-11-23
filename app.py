@@ -1,26 +1,20 @@
 from flask import Flask, request, send_file
 from rembg import remove
-from io import BytesIO
+import io
 
 app = Flask(__name__)
 
-@app.route('/remove-bg', methods=['POST'])
-def remove_bg():
-    if 'image' not in request.files:
-        return {'error': 'لم يتم توفير صورة'}, 400
-    
-    # قراءة الصورة المُرسلة
-    input_image = request.files['image'].read()
-    
-    # معالجة الصورة لإزالة الخلفية
-    output_image = remove(input_image)
-    
-    # تحويل النتيجة إلى تدفق بايتات
-    output_image_io = BytesIO(output_image)
-    output_image_io.seek(0)
-    
-    # إرسال الصورة الناتجة كملف
-    return send_file(output_image_io, mimetype='image/png')
+@app.route('/remove_bg', methods=['POST'])
+def remove_background():
+    file = request.files['file']
+    if not file:
+        return 'No file provided.', 400
+    input_img = file.read()
+    output_img = remove(input_img)
+    byte_io = io.BytesIO()
+    byte_io.write(output_img)
+    byte_io.seek(0)
+    return send_file(byte_io, mimetype='image/png')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run()
