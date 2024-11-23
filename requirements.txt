@@ -1,2 +1,4 @@
+flask
+rembg
 pip install --upgrade pip
 pip freeze > requirements.txt
