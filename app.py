@@ -4,6 +4,10 @@ import io
 
 app = Flask(__name__)
 
+@app.route('/health')
+def health():
+    return "OK"
+
 @app.route('/remove_bg', methods=['POST'])
 def remove_background():
     file = request.files['file']
